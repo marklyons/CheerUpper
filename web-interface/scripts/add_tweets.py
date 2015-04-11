@@ -19,12 +19,13 @@ for sentiment in sentiments:
 	tweets = client.request('https://api.twitter.com/1.1/search/tweets.json?count=5&q=' + query)
 	statuses = tweets["statuses"]
 	for status in statuses:
+		print status.keys()
 		curr_status = status["text"].encode('ascii', 'ignore')
 
 		#logic for deciding whether it is good or not
 		if(True):
 			final_statuses.append(curr_status)
-			print curr_status + "\n"
+			curr_status + "\n"
 
 
 
