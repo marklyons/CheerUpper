@@ -15,21 +15,26 @@ classifier = ClassificationModel(id=88)
 
 # to be filled with all matched/possible statuses
 master = {}
-sentiments = ["sad", "depressed", "troubled", "down", "upset", "heartbroken", "terrible"]
-quants = ["", "really ", "very ", "super ", "extremely ", "extra "]
+sentiments = ["sad", "depressed", "upset", "heartbroken"]
+quants = ["", "really ", "very ", "extremely "]
+me = ["I am ", "I'm ", "I'm feeling "]
 
 sad_boys = []
 for s in sentiments:
 	for q in quants:
-		sad_boys.append(q + s)
-
-for sentiment in sad_boys:
-	final_string = "\"I'm feeling " + sentiment + " \""
-	query = urllib2.quote(final_string).encode("utf8")
-
-	tweets = client.request('https://api.twitter.com/1.1/search/tweets.json?count=100&result_type=recent&q=' + query)
+		for m in me:
+			sad_boys.append(m + q + s)
+i = 0
+j = 0
+for s in sad_boys:
+	print "query#: " + str(i) + " Using: " + s
+	query = urllib2.quote(s).encode("utf8")
+	tweets = client.request('https://api.twitter.com/1.1/search/tweets.json?count=50&result_type=recent&q=' + "\"" + query + "\"")
 	statuses = tweets["statuses"]
+	i += 1
 	for status in statuses: #iterating over tweets for specific sentiment
+		print "status parse: " + str(j)
+		j += 1
 		if status["in_reply_to_status_id"] == None:
 			curr_status = status["text"].encode('ascii', 'ignore')
 			curr_id = status["id"]
@@ -46,12 +51,18 @@ for status in master.keys():
 				filtered_statuses[status] = master[status]
 
 #filter positivity
+#my_dataset = ClassificationData(private=True, data_type="text", name="Tweets")
+
+i = 0
 final_tweets = {}
 for status in filtered_statuses.keys():
+	i += 1
 	if "#cheermeup" in status.lower():
+		i -= 1
 		final_tweets[status] = filtered_statuses[status]
 	elif (classifier.predict(status, input_type='text'))[0]["label"] != "positive":
 		final_tweets[status] = filtered_statuses[status]
+	print "Query Meta# " + str(i)
 
 #printing
 i = 0
