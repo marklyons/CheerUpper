@@ -15,11 +15,16 @@ classifier = ClassificationModel(id=88)
 
 # to be filled with all matched/possible statuses
 master = {}
-sentiments = ["sad", "depressed", "down", "really sad", "upset", "heartbroken"]
+sentiments = ["sad", "depressed", "troubled", "down", "upset", "heartbroken", "terrible"]
+quants = ["", "really ", "very ", "super ", "extremely ", "extra "]
 
-base_string = "\"I'm feeling "
-for sentiment in sentiments:
-	final_string = base_string + sentiment + ":( \""
+sad_boys = []
+for s in sentiments:
+	for q in quants:
+		sad_boys.append(q + s)
+
+for sentiment in sad_boys:
+	final_string = "\"I'm feeling " + sentiment + " \""
 	query = urllib2.quote(final_string).encode("utf8")
 
 	tweets = client.request('https://api.twitter.com/1.1/search/tweets.json?count=100&result_type=recent&q=' + query)
@@ -43,11 +48,15 @@ for status in master.keys():
 #filter positivity
 final_tweets = {}
 for status in filtered_statuses.keys():
-	if (classifier.predict(status, input_type='text'))[0]["label"] != "positive":
+	if "#cheermeup" in status.lower():
+		final_tweets[status] = filtered_statuses[status]
+	elif (classifier.predict(status, input_type='text'))[0]["label"] != "positive":
 		final_tweets[status] = filtered_statuses[status]
 
 #printing
+i = 0
 for status in final_tweets:
+	i += 1
 	print status + "\n"
-
+print i
 #final_tweets is a dictionary, the keys will be the most depressing of messages, and their value is the post's id #
