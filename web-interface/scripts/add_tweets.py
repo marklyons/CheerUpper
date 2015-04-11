@@ -17,21 +17,10 @@ for sentiment in sentiments:
 
 	tweets = client.request('https://api.twitter.com/1.1/search/tweets.json?count=100&result_type=recent&q=' + query)
 	statuses = tweets["statuses"]
-<<<<<<< HEAD
-	for status in statuses:
-		print status.keys()
-		curr_status = status["text"].encode('ascii', 'ignore')
-
-		#logic for deciding whether it is good or not
-		if(True):
-			final_statuses.append(curr_status)
-			curr_status + "\n"
-=======
 	for status in statuses: #iterating over tweets for specific sentiment
 		if status["in_reply_to_status_id"] == None:
 			curr_status = status["text"].encode('ascii', 'ignore')
 			final_statuses.append(curr_status)
->>>>>>> 42f1bc8531eb405f62727564bba2d7f13e43436b
 
 filtered_statuses = []
 for status in final_statuses:
@@ -45,5 +34,3 @@ for status in final_statuses:
 #printing
 for status in filtered_statuses:
 	print status + "\n"
-
-
