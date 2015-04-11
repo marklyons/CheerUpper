@@ -1,0 +1,28 @@
+body{
+	background-color: #0084b4;
+	width:100%;
+	text-align: center;
+}
+
+#logo{
+	display:inline-block;
+	width:400;
+	height:159;
+}
+
+#container{
+	width:800px;
+	display:inline-block;
+	text-align: center;
+}
+
+#buttons{
+	margin-top:50px;
+}
+
+.extra-lg-btn{
+	width:250px;
+	height:25px;
+	padding-top:15px;
+	margin-bottom:15px;
+}
